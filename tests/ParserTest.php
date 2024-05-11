@@ -97,6 +97,11 @@ class ParserTest extends TestCase
         $path = 'tests/fixtures/file2.yaml';
         $data = parser($path);
         $this->assertEquals($excepted, $data);
+
+
+        $path = 'tests/fixtures/file2.txt';
+        $this->expectException(\Exception::class);
+        $data = parser($path);
     }
 
 }
