@@ -53,14 +53,14 @@ class JSONParserTest extends TestCase
      */
     public function test_diff()
     {
-        $path1 = '/home/alexx/project/php-project-48/tests/fixtures/file1.json';
+        $path1 = __DIR__.'/fixtures/file1.json';
         $path2 = 'tests/fixtures/file2.json';
         $result = genDiff($path1, $path2);
         $expected = file_get_contents('tests/fixtures/diff_result');
 
         $this->assertEquals($expected, $result);
 
-        $path1 = '/home/alexx/project/php-project-48/tests/fixtures/file1.json';
+        $path1 = __DIR__.'/fixtures/file1.json';
         $path2 = 'tests/fixtures/file2111.json';
         $result = genDiff($path1, $path2);
         $this->assertEquals('Не найден путь к файлу tests/fixtures/file2111.json',$result);
