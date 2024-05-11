@@ -12,7 +12,12 @@ jobs:
     runs-on: ubuntu-latest
     steps:
       - uses: actions/checkout@v3
-      - name: test        
+      - uses: shivammathur/setup-php@v2
+        with:
+          php-version: '8.2'
+      - name: composer install
+        run: make install
+      - name: test
         run: make test
       - name: lint      
         run: make lint 
