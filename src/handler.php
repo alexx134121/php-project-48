@@ -2,6 +2,10 @@
 
 namespace Diff;
 
+const DELETED = '- ';
+const ADDED = '+ ';
+const EQUALS = '  ';
+const REPLACER = '  ';
 function run(): void
 {
     $doc = <<<DOC
@@ -30,38 +34,47 @@ function getDataFromFiles(string $pathToFile1, string $pathToFile2): array
         $file = $path1 ? $pathToFile2 : $pathToFile1;
         throw new \Exception("Не найден путь к файлу $file");
     }
-    $json1 = json_decode(file_get_contents($path1), true, flags: JSON_THROW_ON_ERROR);
-    $json2 = json_decode(file_get_contents($path2), true, flags: JSON_THROW_ON_ERROR);
-    return [$json1, $json2];
+    $data1 = json_decode(file_get_contents($path1), true, flags: JSON_THROW_ON_ERROR);
+    $data2 = json_decode(file_get_contents($path2), true, flags: JSON_THROW_ON_ERROR);
+    return [$data1, $data2];
 }
 function genDiff(string $pathToFile1, string $pathToFile2): string
 {
     try {
-        [$json1, $json2] = getDataFromFiles($pathToFile1, $pathToFile2);
+        [$data1, $data2] = getDataFromFiles($pathToFile1, $pathToFile2);
     } catch (\Exception $e) {
         echo $e->getMessage();
         return $e->getMessage();
     }
-    $keysJson1 = array_keys($json1);
-    $keysJson2 = array_keys($json2);
-    $deleted = array_filter($keysJson1, fn($item) => !in_array($item, $keysJson2));
-    $added = array_filter($keysJson2, fn($item) => !in_array($item, $keysJson1));
-    $modifed = array_reduce($keysJson1, function ($acc, $key) use ($json1, $json2, $keysJson2, $keysJson1) {
-        if (!isset($json2[$key]) || !isset($json1[$key])) {
-            return $acc;
+    $unique = array_unique(array_merge($data1, $data2));
+    $keys = array_keys($unique);
+    $sortedKeys = immutableSort($keys);
+    $res = array_reduce($sortedKeys, function ($carry, $key) use ($data1, $data2) {
+        if (isset($data1[$key]) && !isset($data2[$key])) {
+            $carry[] = REPLACER . DELETED . "$key: " . toStr($data1[$key]);
+            return $carry;
         }
-        if ($json1[$key] === $json2[$key]) {
-            $acc[] = "  {$key}: {$json1[$key]}";
-            return $acc;
+        if (!isset($data1[$key]) && isset($data2[$key])) {
+            $carry[] = REPLACER . ADDED . "$key: " . toStr($data2[$key]);
+            return $carry;
         }
-        $acc[] = "- $key : {$json1[$key]}";
-        $acc[] = "+ $key : {$json2[$key]}";
-        return $acc;
+        if ($data1[$key] == $data2[$key]) {
+            $carry[] = REPLACER . EQUALS . "$key: " . toStr($data1[$key]);
+            return $carry;
+        }
+        $carry[] = REPLACER . DELETED . "$key: " . toStr($data1[$key]);
+        $carry[] = REPLACER . ADDED . "$key: " . toStr($data2[$key]);
+        return $carry;
     }, []);
+    return "{\n" . implode("\n", $res) . "\n}";
+}
+function toStr(mixed $value): string
+{
+    return str_replace("'", '', trim(var_export($value, true)));
+}
 
-    $result = "{\n" . implode("\n", array_map(fn($key) => "- {$deleted[$key]}: " . var_export($json1[$deleted[$key]], true), array_keys($deleted))) . "\n";
-    $result .= implode("\n", array_map(fn($key) => "+ {$added[$key]}: " . var_export($json2[$added[$key]], true), array_keys($added))) . "\n";
-    $result .= implode("\n", $modifed) . "\n}";
-
-    return $result;
+function immutableSort(array $data): array
+{
+    sort($data);
+    return $data;
 }
