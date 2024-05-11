@@ -22,6 +22,6 @@ jobs:
       - name: lint      
         run: make lint
       - name: code coverage
-      - uses: paambaati/codeclimate-action@v6.0.0
+        uses: paambaati/codeclimate-action@v6.0.0
         env:
-        CC_TEST_REPORTER_ID: ${{secret.CODE_CLIMAT_REPORT_ID}}
+          CC_TEST_REPORTER_ID: ${{ secrets.CODE_CLIMAT_REPORT_ID}}
