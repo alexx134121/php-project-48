@@ -7,4 +7,4 @@ lint:
 autoload:
 	composer dump-autoload
 test:
-	XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit tests/JSONParserTest.php -c phpunit.xml
+	XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit tests -c phpunit.xml

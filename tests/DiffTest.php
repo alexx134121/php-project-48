@@ -4,25 +4,12 @@ namespace Diff\Tests;
 
 use PHPUnit\Framework\TestCase;
 use function Diff\genDiff;
-use function Diff\getDataFromFiles;
+use function Diff\getDataFromFile;
 use function Diff\immutableSort;
 use function Diff\toStr;
 
-class JSONParserTest extends TestCase
+class DiffTest extends TestCase
 {
-
-    /**
-     * @covers \Diff\getDataFromFiles()
-     */
-
-    public function test_file_not_exists()
-    {
-        $path1 = 'tests/fixtures/file2.json';
-        $path2 = 'fixtures/file2111.json';
-        $this->expectException(\Exception::class);
-        $result = getDataFromFiles($path1, $path2);
-        $this->assertEquals('Не найден путь к файлу fixtures/file2111.json', $result);
-    }
 
     /**
      * @covers       \Diff\toStr()
@@ -46,24 +33,39 @@ class JSONParserTest extends TestCase
     }
 
     /**
-     * @covers \Diff\getDataFromFiles()
+     * @covers \Diff\getDataFromFile()
      * @covers \Diff\immutableSort()
      * @covers \Diff\toStr()
      * @covers \Diff\genDiff()
+     * @covers \Diff\jsonParser()
+     * @covers \Diff\parser()
      */
     public function test_diff()
     {
-        $path1 = __DIR__.'/fixtures/file1.json';
+        $path1 = __DIR__ . '/fixtures/file1.json';
         $path2 = 'tests/fixtures/file2.json';
         $result = genDiff($path1, $path2);
         $expected = file_get_contents('tests/fixtures/diff_result');
 
         $this->assertEquals($expected, $result);
 
-        $path1 = __DIR__.'/fixtures/file1.json';
+        $path1 = __DIR__ . '/fixtures/file1.json';
         $path2 = 'tests/fixtures/file2111.json';
+        $this->expectException(\Exception::class);
         $result = genDiff($path1, $path2);
-        $this->assertEquals('Не найден путь к файлу tests/fixtures/file2111.json',$result);
+
+        $path1 = __DIR__ . '/fixtures/file1.yml';
+        $path2 = 'tests/fixtures/file2.yaml';
+        $result = genDiff($path1, $path2);
+        $expected = file_get_contents('tests/fixtures/diff_result');
+
+        $this->assertEquals($expected, $result);
+
+        $path1 = __DIR__ . '/fixtures/file1.yml';
+        $path2 = 'tests/fixtures/file2111.yaml';
+        $this->expectException(\Exception::class);
+        $result = genDiff($path1, $path2);
+
     }
 
     public function string_test_data_provider()

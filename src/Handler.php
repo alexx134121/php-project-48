@@ -26,25 +26,11 @@ DOC;
     $args = $result->args;
     genDiff($args['<firstFile>'], $args['<secondFile>']);
 }
-function getDataFromFiles(string $pathToFile1, string $pathToFile2): array
-{
-    $path1 = realpath($pathToFile1);
-    $path2 = realpath($pathToFile2);
-    if (!$path1 || !$path2) {
-        $file = $path1 ? $pathToFile2 : $pathToFile1;
-        throw new \Exception("Не найден путь к файлу $file");
-    }
-    $data1 = json_decode(file_get_contents($path1), true, flags: JSON_THROW_ON_ERROR);
-    $data2 = json_decode(file_get_contents($path2), true, flags: JSON_THROW_ON_ERROR);
-    return [$data1, $data2];
-}
 function genDiff(string $pathToFile1, string $pathToFile2): string
 {
-    try {
-        [$data1, $data2] = getDataFromFiles($pathToFile1, $pathToFile2);
-    } catch (\Exception $e) {
-        return $e->getMessage();
-    }
+
+    $data1 = parser($pathToFile1);
+    $data2 = parser($pathToFile2);
     $unique = array_unique(array_merge($data1, $data2));
     $keys = array_keys($unique);
     $sortedKeys = immutableSort($keys);
