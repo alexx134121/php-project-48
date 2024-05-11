@@ -1,2 +1,10 @@
 /vendor/
 .phpunit.result.cache
+.phpunit.cache
+xml-coverage
+clover.xml
+cobertura.xml
+html-coverage
+coverage.php
+coverage.txt
+crap4j.xml

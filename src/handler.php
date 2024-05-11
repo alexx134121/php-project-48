@@ -43,7 +43,6 @@ function genDiff(string $pathToFile1, string $pathToFile2): string
     try {
         [$data1, $data2] = getDataFromFiles($pathToFile1, $pathToFile2);
     } catch (\Exception $e) {
-        echo $e->getMessage();
         return $e->getMessage();
     }
     $unique = array_unique(array_merge($data1, $data2));
