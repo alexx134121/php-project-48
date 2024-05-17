@@ -9,7 +9,8 @@
         },
         "files": [
             "src/Handler.php",
-            "src/Parsers.php"
+            "src/Parsers.php",
+            "src/Formatter.php"
         ]
     },
     "bin": [

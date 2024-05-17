@@ -3,8 +3,9 @@
 namespace Diff\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function Diff\genDiff;
-use function Diff\getDataFromFile;
+use Symfony\Component\Yaml\Yaml;
+use function Diff\format;
+use function Diff\genDiffFile;
 use function Diff\immutableSort;
 use function Diff\toStr;
 
@@ -36,7 +37,7 @@ class DiffTest extends TestCase
      * @covers \Diff\getDataFromFile()
      * @covers \Diff\immutableSort()
      * @covers \Diff\toStr()
-     * @covers \Diff\genDiff()
+     * @covers \Diff\genDiffFile()
      * @covers \Diff\jsonParser()
      * @covers \Diff\parser()
      */
@@ -44,35 +45,121 @@ class DiffTest extends TestCase
     {
         $path1 = __DIR__ . '/fixtures/file1.json';
         $path2 = 'tests/fixtures/file2.json';
-        $result = genDiff($path1, $path2);
+        $diff = genDiffFile($path1, $path2);
+        $result = format($diff);
         $expected = file_get_contents('tests/fixtures/diff_result');
 
         $this->assertEquals($expected, $result);
 
         $path1 = __DIR__ . '/fixtures/file1.json';
-        $path2 = 'tests/fixtures/file2111.json';
+        $path2 = '/tests/fixtures/file2111.json';
         $this->expectException(\Exception::class);
-        $result = genDiff($path1, $path2);
+        $result = genDiffFile($path1, $path2);
 
         $path1 = __DIR__ . '/fixtures/file1.yml';
-        $path2 = 'tests/fixtures/file2.yaml';
-        $result = genDiff($path1, $path2);
+        $path2 = '/tests/fixtures/file2.yaml';
+        $result = genDiffFile($path1, $path2);
         $expected = file_get_contents('tests/fixtures/diff_result');
 
         $this->assertEquals($expected, $result);
 
         $path1 = __DIR__ . '/fixtures/file1.yml';
-        $path2 = 'tests/fixtures/file2111.yaml';
+        $path2 = '/tests/fixtures/file2111.yaml';
         $this->expectException(\Exception::class);
-        $result = genDiff($path1, $path2);
+        $result = genDiffFile($path1, $path2);
+        $this->assertEquals($expected,$result);
+
+    }
+    /**
+     * @covers \Diff\getDataFromFile()
+     * @covers \Diff\immutableSort()
+     * @covers \Diff\toStr()
+     * @covers \Diff\genDiffFile()
+     * @covers \Diff\jsonParser()
+     * @covers \Diff\parser()
+     */
+
+    public function test_nested_structure()
+    {
+        $path1 = __DIR__ . '/fixtures/nested_file1.json';
+        $path2 = 'tests/fixtures/nested_file2.json';
+        $result = genDiffFile($path1, $path2);
+
+        $expected =json_decode(file_get_contents(__DIR__ . '/fixtures/nested_structure.json'),true);
+        $this->assertEquals($expected,$result);
+
+        $path1 = __DIR__ . '/fixtures/nested_file1.yaml';
+        $path2 = 'tests/fixtures/nested_file2.yaml';
+        $result = genDiffFile($path1, $path2);
+        $this->assertEquals($expected,$result);
+    }
+
+    /**
+     * @covers \Diff\getDataFromFile()
+     * @covers \Diff\immutableSort()
+     * @covers \Diff\toStr()
+     * @covers \Diff\genDiffFile()
+     * @covers \Diff\jsonParser()
+     * @covers \Diff\parser()
+     */
+    public function test_plan_structure()
+    {
+        $path1 = __DIR__ . '/fixtures/file1.json';
+        $path2 = 'tests/fixtures/file2.json';
+        $result = genDiffFile($path1, $path2);
+        $expected =json_decode(file_get_contents(__DIR__ . '/fixtures/plan_structure.json'),true);
+        $this->assertEquals($expected,$result);
+    }
+    /**
+     * @covers \Diff\getDataFromFile()
+     * @covers \Diff\immutableSort()
+     * @covers \Diff\toStr()
+     * @covers \Diff\genDiffFile()
+     * @covers \Diff\jsonParser()
+     * @covers \Diff\parser()
+     * @covers \Diff\format()
+     */
+    public function test_format_plan_structure()
+    {
+        $path1 = __DIR__ . '/fixtures/file1.json';
+        $path2 = 'tests/fixtures/file2.json';
+        $result = genDiffFile($path1, $path2);
+        $formatted = format($result, 'stylish');
+        $excepted = file_get_contents(__DIR__ . '/fixtures/diff_result');
+        $this->assertEquals($excepted, $formatted);
 
     }
 
+    /**
+     * @covers \Diff\getDataFromFile()
+     * @covers \Diff\immutableSort()
+     * @covers \Diff\toStr()
+     * @covers \Diff\genDiffFile()
+     * @covers \Diff\jsonParser()
+     * @covers \Diff\parser()
+     * @covers \Diff\format()
+     */
+    public function test_nested_diff()
+    {
+        $path1 = __DIR__ . '/fixtures/nested_file1.json';
+        $path2 = 'tests/fixtures/nested_file2.json';
+        $result = genDiffFile($path1, $path2);
+        $formatted = format($result, 'stylish');
+        $expected = file_get_contents('tests/fixtures/nested_diff_result');
+        $this->assertEquals($expected, $formatted);
+
+        $path1 = __DIR__ . '/fixtures/nested_file1.yaml';
+        $path2 = 'tests/fixtures/nested_file2.yaml';
+        $result = genDiffFile($path1, $path2);
+        $formatted = format($result, 'stylish');
+        $this->assertEquals($expected, $formatted);
+
+    }
     public function string_test_data_provider()
     {
         return [
             [true, 'true'],
-            [null, 'NULL'],
+            [null, 'null'],
             [4, 4],
             ['test', 'test'],
         ];
