@@ -240,6 +240,25 @@ class DiffTest extends TestCase
         $expected = file_get_contents( __DIR__ . '/fixtures/diff_plain_format');
         $this->assertEquals($expected, $formatted);
     }
+    /**
+     * @covers \Diff\getDataFromFile()
+     * @covers \Diff\immutableSort()
+     * @covers \Diff\toStr()
+     * @covers \Diff\genDiffFile()
+     * @covers \Diff\jsonParser()
+     * @covers \Diff\parser()
+     * @covers \Diff\Formatters\format()
+     * @covers \Diff\Formatters\json()
+     */
+    public function test_json_structure()
+    {
+        $path1 = __DIR__ . '/fixtures/nested_file1.json';
+        $path2 = __DIR__ . '/fixtures/nested_file2.json';
+        $result = genDiffFile($path1, $path2);
+        $formatted = format($result, 'json');
+        $expected = file_get_contents( __DIR__ . '/fixtures/diff_json_format');
+        $this->assertEquals($expected, $formatted);
+    }
     public function string_test_data_provider()
     {
         return [

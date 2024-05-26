@@ -1,1 +1,0 @@
-[{"key_name":"follow","type":"del","value":false,"child":[]},{"key_name":"host","type":"without_changes","value":"hexlet.io","child":[]},{"key_name":"proxy","type":"del","value":"123.234.53.22","child":[]},{"key_name":"timeout","type":"del","value":50,"child":[]},{"key_name":"timeout","type":"add","value":20,"child":[]},{"key_name":"verbose","type":"add","value":true,"child":[]}]
