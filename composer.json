@@ -10,7 +10,9 @@
         "files": [
             "src/Handler.php",
             "src/Parsers.php",
-            "src/Formatter.php"
+            "src/Formatters/Formatters.php",
+            "src/Formatters/Plain.php",
+            "src/Formatters/Stylish.php"
         ]
     },
     "bin": [

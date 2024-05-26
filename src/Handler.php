@@ -2,6 +2,8 @@
 
 namespace Diff;
 
+use function Diff\Formatters\format;
+
 const DELETED = '- ';
 const ADDED = '+ ';
 const EQUALS = '  ';
@@ -24,17 +26,18 @@ DOC;
 
     $result = \Docopt::handle($doc, ['version' => 'cli 1.0']);
     $args = $result->args;
-    $diff = genDiffFile($args['<firstFile>'], $args['<secondFile>']);
-    print_r(format($diff, $args['--format']));
+    $diff = genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
+    print_r($diff);
 }
 
-function node(mixed $val, string $key, array $child, string $type): array
+function node(mixed $val, string $key, array $child, string $type, mixed $oldValue = null): array
 {
     return
         [
             'key_name' => $key,
             'type' => $type,
             'value' => $val,
+            'old_value' => $oldValue,
             'child' => $child
         ];
 }
@@ -42,6 +45,11 @@ function node(mixed $val, string $key, array $child, string $type): array
 function getKey(array $node): string
 {
     return $node['key_name'];
+}
+
+function getOldValue(array $node): mixed
+{
+    return $node['old_value'];
 }
 
 function getType(array $node): string
@@ -63,49 +71,58 @@ function genDiffFile(string $pathToFile1, string $pathToFile2): array
 {
     $data1 = parser($pathToFile1);
     $data2 = parser($pathToFile2);
-    return genDiff($data1, $data2);
+    return getStructure($data1, $data2);
 }
 
-function genDiff(array $data1, $data2)
+function genDiff(string $pathToFile1, string $pathToFile2, string $format): string
 {
-    $merge = array_merge(array_keys($data1), array_keys($data2));
+    return format(genDiffFile($pathToFile1, $pathToFile2), $format);
+}
+
+function getStructure(array $old, array $new): array
+{
+    $merge = array_merge(array_keys($old), array_keys($new));
     $unique = array_unique($merge);
     $keys = $unique;
     $sortedKeys = immutableSort($keys);
-    $res = array_reduce($sortedKeys, function ($carry, $key) use ($data1, $data2) {
-        if (array_key_exists($key, $data1) && !array_key_exists($key, $data2)) {
-            if (is_array($data1[$key])) {
-                $carry[] = node(null, $key, genDiff($data1[$key], $data1[$key]), 'del');
+    return array_reduce($sortedKeys, function ($carry, $key) use ($old, $new) {
+        if (array_key_exists($key, $old) && !array_key_exists($key, $new)) {
+            if (is_array($old[$key])) {
+                $carry[] = node(null, $key, getStructure($old[$key], $old[$key]), 'del');
                 return $carry;
             }
-            $carry[] = node($data1[$key], $key, [], 'del');
+            $carry[] = node($old[$key], $key, [], 'del');
             return $carry;
         }
-        if (!array_key_exists($key, $data1) && array_key_exists($key, $data2)) {
-            if (is_array($data2[$key])) {
-                $carry[] = node(null, $key, genDiff($data2[$key], $data2[$key]), 'add');
+        if (!array_key_exists($key, $old) && array_key_exists($key, $new)) {
+            if (is_array($new[$key])) {
+                $carry[] = node(null, $key, getStructure($new[$key], $new[$key]), 'add');
                 return $carry;
             }
-            $carry[] = node($data2[$key], $key, [], 'add');
+            $carry[] = node($new[$key], $key, [], 'add');
             return $carry;
         }
-        if (is_array($data1[$key]) && is_array($data2[$key])) {
-            $carry[] = node(null, $key, genDiff($data1[$key], $data2[$key]), 'without_changes');
+        if (is_array($old[$key]) && is_array($new[$key])) {
+            $carry[] = node(null, $key, getStructure($old[$key], $new[$key]), 'without_changes');
             return $carry;
         }
-        if ($data1[$key] == $data2[$key]) {
-            $carry[] = node($data2[$key], $key, [], 'without_changes');
+        if ($old[$key] == $new[$key]) {
+            $carry[] = node($new[$key], $key, [], 'without_changes');
             return $carry;
         }
-        $carry[] = is_array($data1[$key]) ?
-            node(null, $key, genDiff($data1[$key], $data1[$key]), 'del') :
-            node($data1[$key], $key, [], 'del');
-        $carry[] = is_array($data2[$key]) ?
-            node(null, $key, genDiff($data2[$key], $data2[$key]), 'add') :
-            node($data2[$key], $key, [], 'add');
+        ///
+        if (is_array($old[$key])) {
+            $carry[] = node($new[$key], $key, [], 'update', getStructure($old[$key], $old[$key]));
+            return $carry;
+        }
+        if (is_array($new[$key])) {
+            $carry[] = node(getStructure($new[$key], $new[$key]), $key, [], 'update', $old[$key]);
+            return $carry;
+        }
+        ///
+        $carry[] = node($new[$key], $key, [], 'update', $old[$key]);
         return $carry;
     }, []);
-    return $res;
 }
 
 function toStr(mixed $value): string

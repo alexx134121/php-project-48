@@ -1,0 +1,202 @@
+[
+    {
+        "key_name": "common",
+        "type": "without_changes",
+        "value": null,
+        "old_value": null,
+        "child": [
+            {
+                "key_name": "follow",
+                "type": "add",
+                "value": false,
+                "old_value": null,
+                "child": []
+            },
+            {
+                "key_name": "setting1",
+                "type": "without_changes",
+                "value": "Value 1",
+                "old_value": null,
+                "child": []
+            },
+            {
+                "key_name": "setting2",
+                "type": "del",
+                "value": 200,
+                "old_value": null,
+                "child": []
+            },
+            {
+                "key_name": "setting3",
+                "type": "update",
+                "value": null,
+                "old_value": true,
+                "child": []
+            },
+            {
+                "key_name": "setting4",
+                "type": "add",
+                "value": "blah blah",
+                "old_value": null,
+                "child": []
+            },
+            {
+                "key_name": "setting5",
+                "type": "add",
+                "value": null,
+                "old_value": null,
+                "child": [
+                    {
+                        "key_name": "key5",
+                        "type": "without_changes",
+                        "value": "value5",
+                        "old_value": null,
+                        "child": []
+                    }
+                ]
+            },
+            {
+                "key_name": "setting6",
+                "type": "without_changes",
+                "value": null,
+                "old_value": null,
+                "child": [
+                    {
+                        "key_name": "doge",
+                        "type": "without_changes",
+                        "value": null,
+                        "old_value": null,
+                        "child": [
+                            {
+                                "key_name": "wow",
+                                "type": "update",
+                                "value": "so much",
+                                "old_value": "",
+                                "child": []
+                            }
+                        ]
+                    },
+                    {
+                        "key_name": "key",
+                        "type": "without_changes",
+                        "value": "value",
+                        "old_value": null,
+                        "child": []
+                    },
+                    {
+                        "key_name": "ops",
+                        "type": "add",
+                        "value": "vops",
+                        "old_value": null,
+                        "child": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "key_name": "group1",
+        "type": "without_changes",
+        "value": null,
+        "old_value": null,
+        "child": [
+            {
+                "key_name": "baz",
+                "type": "update",
+                "value": "bars",
+                "old_value": "bas",
+                "child": []
+            },
+            {
+                "key_name": "foo",
+                "type": "without_changes",
+                "value": "bar",
+                "old_value": null,
+                "child": []
+            },
+            {
+                "key_name": "nest",
+                "type": "update",
+                "value": "str",
+                "old_value":
+                    [
+                        {
+                        "key_name": "key",
+                        "type": "without_changes",
+                        "value": "value",
+                        "old_value": null,
+                        "child": []
+                    }],
+                "child": []
+            }
+        ]
+    },
+    {
+        "key_name": "group2",
+        "type": "del",
+        "value": null,
+        "old_value": null,
+        "child": [
+            {
+                "key_name": "abc",
+                "type": "without_changes",
+                "value": 12345,
+                "old_value": null,
+                "child": []
+            },
+            {
+                "key_name": "deep",
+                "type": "without_changes",
+                "value": null,
+                "old_value": null,
+                "child": [
+                    {
+                        "key_name": "id",
+                        "type": "without_changes",
+                        "value": 45,
+                        "old_value": null,
+                        "child": []
+                    }
+                ]
+            }
+        ]
+    },
+    {
+        "key_name": "group3",
+        "type": "add",
+        "value": null,
+        "old_value": null,
+        "child": [
+            {
+                "key_name": "deep",
+                "type": "without_changes",
+                "value": null,
+                "old_value": null,
+                "child": [
+                    {
+                        "key_name": "id",
+                        "type": "without_changes",
+                        "value": null,
+                        "old_value": null,
+                        "child": [
+                            {
+                                "key_name": "number",
+                                "type": "without_changes",
+                                "value": 45,
+                                "old_value": null,
+                                "child": []
+                            }
+                        ]
+                    }
+                ]
+            },
+            {
+                "key_name": "fee",
+                "type": "without_changes",
+                "value": 100500,
+                "old_value": null,
+                "child": []
+            }
+        ]
+    }
+]
