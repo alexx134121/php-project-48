@@ -1,11 +1,7 @@
 <?php
 
-namespace Diff\Formatters;
+namespace Differ\Formatters;
 
-use function Diff\getChild;
-use function Diff\getKey;
-use function Diff\getValue;
-use function Diff\toStr;
 
 function json(array $data): string
 {

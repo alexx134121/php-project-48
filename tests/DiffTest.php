@@ -1,25 +1,24 @@
 <?php
 
-namespace Diff\Tests;
+namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function Diff\Formatters\format;
-use function Diff\genDiff;
-use function Diff\genDiffFile;
-use function Diff\getChild;
-use function Diff\getKey;
-use function Diff\getOldValue;
-use function Diff\getValue;
-use function Diff\immutableSort;
-use function Diff\node;
-use function Diff\run;
-use function Diff\toStr;
+use function Differ\Formatters\format;
+use function Differ\Differ\genDiff;
+use function Differ\Differ\genDiffFile;
+use function Differ\Differ\getChild;
+use function Differ\Differ\getKey;
+use function Differ\Differ\getOldValue;
+use function Differ\Differ\getValue;
+use function Differ\Differ\immutableSort;
+use function Differ\Differ\node;
+use function Differ\Differ\toStr;
 
 class DiffTest extends TestCase
 {
 
     /**
-     * @covers       \Diff\toStr()
+     * @covers       \Differ\Differ\toStr()
      * @dataProvider string_test_data_provider
      */
     public function test_to_string($val, $excepted)
@@ -28,7 +27,7 @@ class DiffTest extends TestCase
     }
 
     /**
-     * @covers \Diff\immutableSort()
+     * @covers \Differ\Differ\immutableSort()
      */
     public function test_immutable_sort()
     {
@@ -40,13 +39,13 @@ class DiffTest extends TestCase
     }
 
     /**
-     * @covers \Diff\getDataFromFile()
-     * @covers \Diff\immutableSort()
-     * @covers \Diff\toStr()
-     * @covers \Diff\genDiffFile()
-     * @covers \Diff\jsonParser()
-     * @covers \Diff\parser()
-     * @covers \Diff\getStructure()
+     * @covers \Differ\getDataFromFile()
+     * @covers \Differ\Differ\immutableSort()
+     * @covers \Differ\Differ\toStr()
+     * @covers \Differ\Differ\genDiffFile()
+     * @covers \Differ\jsonParser()
+     * @covers \Differ\parser()
+     * @covers \Differ\Differ\getStructure()
      */
     public function test_diff()
     {
@@ -78,15 +77,15 @@ class DiffTest extends TestCase
 
     }
     /**
-     * @covers \Diff\getDataFromFile()
-     * @covers \Diff\immutableSort()
-     * @covers \Diff\toStr()
-     * @covers \Diff\genDiffFile()
-     * @covers \Diff\jsonParser()
-     * @covers \Diff\parser()
-     * @covers \Diff\genDiff()
-     * @covers \Diff\getStructure()
-     * @covers \Diff\getOldValue()
+     * @covers \Differ\getDataFromFile()
+     * @covers \Differ\Differ\immutableSort()
+     * @covers \Differ\Differ\toStr()
+     * @covers \Differ\Differ\genDiffFile()
+     * @covers \Differ\jsonParser()
+     * @covers \Differ\parser()
+     * @covers \Differ\Differ\genDiff()
+     * @covers \Differ\Differ\getStructure()
+     * @covers \Differ\Differ\getOldValue()
      */
 
     public function test_nested_structure()
@@ -104,13 +103,13 @@ class DiffTest extends TestCase
     }
 
     /**
-     * @covers \Diff\getDataFromFile()
-     * @covers \Diff\immutableSort()
-     * @covers \Diff\toStr()
-     * @covers \Diff\genDiffFile()
-     * @covers \Diff\jsonParser()
-     * @covers \Diff\parser()
-     * @covers \Diff\getStructure()
+     * @covers \Differ\getDataFromFile()
+     * @covers \Differ\Differ\immutableSort()
+     * @covers \Differ\Differ\toStr()
+     * @covers \Differ\Differ\genDiffFile()
+     * @covers \Differ\jsonParser()
+     * @covers \Differ\parser()
+     * @covers \Differ\Differ\getStructure()
      */
     public function test_plan_structure()
     {
@@ -121,14 +120,14 @@ class DiffTest extends TestCase
         $this->assertEquals($expected,$result);
     }
     /**
-     * @covers \Diff\getDataFromFile()
-     * @covers \Diff\immutableSort()
-     * @covers \Diff\toStr()
-     * @covers \Diff\genDiffFile()
-     * @covers \Diff\jsonParser()
-     * @covers \Diff\parser()
-     * @covers \Diff\Formatters\format()
-     * @covers \Diff\getStructure()
+     * @covers \Differ\getDataFromFile()
+     * @covers \Differ\Differ\immutableSort()
+     * @covers \Differ\Differ\toStr()
+     * @covers \Differ\Differ\genDiffFile()
+     * @covers \Differ\jsonParser()
+     * @covers \Differ\parser()
+     * @covers \Differ\Formatters\format()
+     * @covers \Differ\Differ\getStructure()
      */
     public function test_format_plan_structure()
     {
@@ -142,17 +141,17 @@ class DiffTest extends TestCase
     }
 
     /**
-     * @covers \Diff\getDataFromFile()
-     * @covers \Diff\immutableSort()
-     * @covers \Diff\toStr()
-     * @covers \Diff\genDiffFile()
-     * @covers \Diff\jsonParser()
-     * @covers \Diff\parser()
-     * @covers \Diff\Formatters\format()
-     * @covers \Diff\Formatters\stylish()
-     * @covers \Diff\Formatters\iter()
-     * @covers \Diff\getStructure()
-     * @covers \Diff\genDiff()
+     * @covers \Differ\getDataFromFile()
+     * @covers \Differ\Differ\immutableSort()
+     * @covers \Differ\Differ\toStr()
+     * @covers \Differ\Differ\genDiffFile()
+     * @covers \Differ\jsonParser()
+     * @covers \Differ\parser()
+     * @covers \Differ\Formatters\format()
+     * @covers \Differ\Formatters\stylish()
+     * @covers \Differ\Formatters\iter()
+     * @covers \Differ\Differ\getStructure()
+     * @covers \Differ\Differ\genDiff()
      */
     public function test_nested_diff()
     {
@@ -180,7 +179,7 @@ class DiffTest extends TestCase
     }
 
     /**
-     * @covers \Diff\Formatters\format()
+     * @covers \Differ\Formatters\format()
      */
     public function test_formatter()
     {
@@ -189,12 +188,12 @@ class DiffTest extends TestCase
     }
 
     /**
-     * @covers \Diff\node()
-     * @covers \Diff\getKey()
-     * @covers \Diff\getChild()
-     * @covers \Diff\getType()
-     * @covers \Diff\getValue()
-     * @covers \Diff\getOldValue()
+     * @covers \Differ\Differ\node()
+     * @covers \Differ\Differ\getKey()
+     * @covers \Differ\Differ\getChild()
+     * @covers \Differ\Differ\getType()
+     * @covers \Differ\Differ\getValue()
+     * @covers \Differ\Differ\getOldValue()
      */
 
     public function test_node()
@@ -216,19 +215,19 @@ class DiffTest extends TestCase
         $this->assertEquals($key,getKey($node));
         $this->assertEquals($val,getValue($node));
         $this->assertEquals($oldValue,getOldValue($node));
-        $this->assertEquals($type,\Diff\getType($node));
+        $this->assertEquals($type,\Differ\Differ\getType($node));
         $this->assertEquals($child,getChild($node));
     }
     /**
-     * @covers \Diff\getDataFromFile()
-     * @covers \Diff\immutableSort()
-     * @covers \Diff\toStr()
-     * @covers \Diff\genDiffFile()
-     * @covers \Diff\jsonParser()
-     * @covers \Diff\parser()
-     * @covers \Diff\Formatters\format()
-     * @covers \Diff\Formatters\plain()
-     * @covers \Diff\Formatters\isComplexValue()
+     * @covers \Differ\getDataFromFile()
+     * @covers \Differ\Differ\immutableSort()
+     * @covers \Differ\Differ\toStr()
+     * @covers \Differ\Differ\genDiffFile()
+     * @covers \Differ\jsonParser()
+     * @covers \Differ\parser()
+     * @covers \Differ\Formatters\format()
+     * @covers \Differ\Formatters\plain()
+     * @covers \Differ\Formatters\isComplexValue()
      */
     public function test_plain_formatter()
     {
@@ -240,14 +239,14 @@ class DiffTest extends TestCase
         $this->assertEquals($expected, $formatted);
     }
     /**
-     * @covers \Diff\getDataFromFile()
-     * @covers \Diff\immutableSort()
-     * @covers \Diff\toStr()
-     * @covers \Diff\genDiffFile()
-     * @covers \Diff\jsonParser()
-     * @covers \Diff\parser()
-     * @covers \Diff\Formatters\format()
-     * @covers \Diff\Formatters\json()
+     * @covers \Differ\getDataFromFile()
+     * @covers \Differ\Differ\immutableSort()
+     * @covers \Differ\Differ\toStr()
+     * @covers \Differ\Differ\genDiffFile()
+     * @covers \Differ\jsonParser()
+     * @covers \Differ\parser()
+     * @covers \Differ\Formatters\format()
+     * @covers \Differ\Formatters\json()
      */
     public function test_json_structure()
     {

@@ -1,8 +1,9 @@
 <?php
 
-namespace Diff;
+namespace Differ\Differ;
 
-use function Diff\Formatters\format;
+use function Differ\Formatters\format;
+use function Differ\parser;
 
 function node(mixed $val, string $key, array $child, string $type, mixed $oldValue = null): array
 {

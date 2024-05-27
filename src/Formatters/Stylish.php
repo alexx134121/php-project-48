@@ -1,12 +1,12 @@
 <?php
 
-namespace  Diff\Formatters;
+namespace  Differ\Formatters;
 
-use function Diff\getValue;
-use function Diff\getChild;
-use function Diff\getKey;
-use function Diff\getOldValue;
-use function Diff\toStr;
+use function Differ\Differ\getValue;
+use function Differ\Differ\getChild;
+use function Differ\Differ\getKey;
+use function Differ\Differ\getOldValue;
+use function Differ\Differ\toStr;
 
 const STYLISH_FORMAT = [
     'add' => '+ ',
@@ -29,7 +29,7 @@ function iter($data, int $nested = 1): string
     $padding = str_repeat(' ', 4 * $nested - 2);
     $paddingRight = str_repeat(' ', 4 * $nested - 4) . "}";
     $res = array_reduce($data, function (string $carry, array $item) use ($nested, $padding) {
-        $type = \Diff\getType($item);
+        $type = \Differ\Differ\getType($item);
         $symbol = STYLISH_FORMAT[$type];
         $key = getKey($item);
         if (is_null(getValue($item)) && !empty(getChild($item))) {

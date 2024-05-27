@@ -1,21 +1,21 @@
 <?php
 
-namespace Diff\Tests;
+namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function Diff\genDiff;
-use function Diff\getDataFromFile;
-use function Diff\immutableSort;
-use function Diff\jsonParser;
-use function Diff\parser;
-use function Diff\toStr;
-use function Diff\ymlParser;
+use function Differ\Differ\genDiff;
+use function Differ\getDataFromFile;
+use function Differ\Differ\immutableSort;
+use function Differ\jsonParser;
+use function Differ\parser;
+use function Differ\Differ\toStr;
+use function Differ\ymlParser;
 
 class ParserTest extends TestCase
 {
 
     /**
-     * @covers \Diff\getDataFromFile()
+     * @covers \Differ\getDataFromFile()
      */
     public function test_file_not_exists()
     {
@@ -26,7 +26,7 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @covers \Diff\getDataFromFile()
+     * @covers \Differ\getDataFromFile()
      */
     public function test_read_file_absolute()
     {
@@ -36,7 +36,7 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @covers \Diff\getDataFromFile()
+     * @covers \Differ\getDataFromFile()
      */
     public function test_read_file()
     {
@@ -46,7 +46,7 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @covers \Diff\jsonParser()
+     * @covers \Differ\jsonParser()
      */
     public function test_JSON_parser()
     {
@@ -62,7 +62,7 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @covers \Diff\ymlParser()
+     * @covers \Differ\ymlParser()
      */
     public function test_YAML_parser()
     {
@@ -78,10 +78,10 @@ class ParserTest extends TestCase
     }
 
     /**
-     * @covers \Diff\getDataFromFile()
-     * @covers \Diff\jsonParser()
-     * @covers \Diff\ymlParser()
-     * @covers \Diff\parser()
+     * @covers \Differ\getDataFromFile()
+     * @covers \Differ\jsonParser()
+     * @covers \Differ\ymlParser()
+     * @covers \Differ\parser()
      */
     public function test_parser()
     {

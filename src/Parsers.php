@@ -1,6 +1,6 @@
 <?php
 
-namespace Diff;
+namespace Differ;
 
 const  YAML_EXTENSION = ['yaml','yml'];
 const  JSON_EXTENSION = 'json';

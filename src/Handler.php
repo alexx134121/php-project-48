@@ -1,8 +1,8 @@
 <?php
 
-namespace Diff;
+namespace Differ;
 
-use function Diff\Formatters\format;
+use function Differ\Formatters\format;
 
 const DELETED = '- ';
 const ADDED = '+ ';

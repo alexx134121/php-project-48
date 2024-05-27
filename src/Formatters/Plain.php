@@ -1,11 +1,11 @@
 <?php
 
-namespace Diff\Formatters;
+namespace Differ\Formatters;
 
-use function Diff\getChild;
-use function Diff\getKey;
-use function Diff\getValue;
-use function Diff\toStr;
+use function Differ\Differ\getChild;
+use function Differ\Differ\getKey;
+use function Differ\Differ\getValue;
+use function Differ\Differ\toStr;
 
 const PLAIN_FORMAT = [
     'add' => "Property '%s' was added with value: %s",
@@ -21,20 +21,20 @@ function plain(array $data, string $path = ''): string
         $value = isComplexValue(getValue($item)) || isComplexValue(getChild($item))
             ? '[complex value]'
             : toStr(getValue($item));
-        $oldValue = isComplexValue(\Diff\getOldValue($item)) ? '[complex value]' : toStr(\Diff\getOldValue($item));
-        if (!empty(getChild($item)) && \Diff\getType($item) == 'without_changes') {
+        $oldValue = isComplexValue(\Differ\Differ\getOldValue($item)) ? '[complex value]' : toStr(\Differ\Differ\getOldValue($item));
+        if (!empty(getChild($item)) && \Differ\Differ\getType($item) == 'without_changes') {
             $child = plain(getChild($item), $currentPath);
             $carry [] = $child;
             return $carry;
-        } elseif (\Diff\getType($item) == 'without_changes') {
+        } elseif (\Differ\Differ\getType($item) == 'without_changes') {
             return $carry;
         }
         $valueString = is_string(getValue($item)) ? "'$value'" : $value;
-        $oldValueString = is_string(\Diff\getOldValue($item)) ? "'$oldValue'" : $oldValue;
-        if (\Diff\getType($item) == 'update') {
-            $str = sprintf(PLAIN_FORMAT[\Diff\getType($item)], $currentPath, $oldValueString, $valueString);
+        $oldValueString = is_string(\Differ\Differ\getOldValue($item)) ? "'$oldValue'" : $oldValue;
+        if (\Differ\Differ\getType($item) == 'update') {
+            $str = sprintf(PLAIN_FORMAT[\Differ\Differ\getType($item)], $currentPath, $oldValueString, $valueString);
         } else {
-            $str = sprintf(PLAIN_FORMAT[\Diff\getType($item)], $currentPath, $valueString, $oldValueString);
+            $str = sprintf(PLAIN_FORMAT[\Differ\Differ\getType($item)], $currentPath, $valueString, $oldValueString);
         }
         $carry[] = $str;
         return $carry;

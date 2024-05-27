@@ -1,8 +1,8 @@
 <?php
 
-namespace Diff\Formatters;
+namespace Differ\Formatters;
 
-use function Diff\Formatters\stylish;
+
 
 const STYLISH = 'stylish';
 const PLAIN = 'plain';
