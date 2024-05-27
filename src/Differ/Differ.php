@@ -83,7 +83,7 @@ function getStructure(array $old, array $new): array
             $carry[] = node(null, $key, getStructure($old[$key], $new[$key]), 'without_changes');
             return $carry;
         }
-        if ($old[$key] == $new[$key]) {
+        if ($old[$key] === $new[$key]) {
             $carry[] = node($new[$key], $key, [], 'without_changes');
             return $carry;
         }
