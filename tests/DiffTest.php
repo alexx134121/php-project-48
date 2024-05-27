@@ -160,7 +160,6 @@ class DiffTest extends TestCase
         $path2 = __DIR__ .'/../'.'tests/fixtures/nested_file2.json';
         $result = genDiffFile($path1, $path2);
         $formatted = format($result, 'stylish');
-
         $expected = file_get_contents(__DIR__ .'/../'.'tests/fixtures/nested_diff_result');
         $this->assertEquals($expected, $formatted);
 
