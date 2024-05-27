@@ -21,7 +21,9 @@ function plain(array $data, string $path = ''): string
         $value = isComplexValue(getValue($item)) || isComplexValue(getChild($item))
             ? '[complex value]'
             : toStr(getValue($item));
-        $oldValue = isComplexValue(\Differ\Differ\getOldValue($item)) ? '[complex value]' : toStr(\Differ\Differ\getOldValue($item));
+        $oldValue = isComplexValue(\Differ\Differ\getOldValue($item)) ?
+            '[complex value]' :
+            toStr(\Differ\Differ\getOldValue($item));
         if (!empty(getChild($item)) && \Differ\Differ\getType($item) == 'without_changes') {
             $child = plain(getChild($item), $currentPath);
             $carry [] = $child;

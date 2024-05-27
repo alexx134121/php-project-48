@@ -2,12 +2,9 @@
 
 namespace Differ\Formatters;
 
-
-
 const STYLISH = 'stylish';
 const PLAIN = 'plain';
 const JSON = 'json';
-
 
 function format(array $data, string $type = STYLISH): string
 {
