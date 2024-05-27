@@ -2,12 +2,8 @@
 
 namespace Differ;
 
-use function Differ\Formatters\format;
+use function Differ\Differ\genDiff;
 
-const DELETED = '- ';
-const ADDED = '+ ';
-const EQUALS = '  ';
-const REPLACER = '  ';
 function run(): void
 {
     $doc = <<<DOC

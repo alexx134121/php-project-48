@@ -24,7 +24,7 @@ function stylish($data, int $nested = 1): string
 function iter($data, int $nested = 1): string
 {
     if (!is_array($data)) {
-        return empty(toStr($data)) ? '' : " " . toStr($data);
+        return toStr($data)=='' ? '' : " " . toStr($data);
     }
     $padding = str_repeat(' ', 4 * $nested - 2);
     $paddingRight = str_repeat(' ', 4 * $nested - 4) . "}";
