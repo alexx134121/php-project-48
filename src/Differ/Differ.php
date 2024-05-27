@@ -5,6 +5,8 @@ namespace Differ\Differ;
 use function Differ\Formatters\format;
 use function Differ\parser;
 
+use const Differ\Formatters\STYLISH;
+
 function node(mixed $val, string $key, array $child, string $type, mixed $oldValue = null): array
 {
     return
@@ -49,7 +51,7 @@ function genDiffFile(string $pathToFile1, string $pathToFile2): array
     return getStructure($data1, $data2);
 }
 
-function genDiff(string $pathToFile1, string $pathToFile2, string $format): string
+function genDiff(string $pathToFile1, string $pathToFile2, string $format = STYLISH): string
 {
     return format(genDiffFile($pathToFile1, $pathToFile2), $format);
 }
