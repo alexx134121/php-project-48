@@ -3,21 +3,18 @@
 namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
-use function Differ\Differ\genDiff;
+
 use function Differ\getDataFromFile;
-use function Differ\Differ\immutableSort;
 use function Differ\jsonParser;
 use function Differ\parser;
-use function Differ\Differ\toStr;
 use function Differ\ymlParser;
 
 class ParserTest extends TestCase
 {
-
     /**
      * @covers \Differ\getDataFromFile()
      */
-    public function test_file_not_exists()
+    public function testFileNotExists()
     {
         $errorPath = 'fixtures/file2111.json';
         $this->expectException(\Exception::class);
@@ -28,7 +25,7 @@ class ParserTest extends TestCase
     /**
      * @covers \Differ\getDataFromFile()
      */
-    public function test_read_file_absolute()
+    public function testReadFileAbsolute()
     {
         $path = __DIR__ . '/fixtures/file2.json';
         $result = getDataFromFile($path);
@@ -38,7 +35,7 @@ class ParserTest extends TestCase
     /**
      * @covers \Differ\getDataFromFile()
      */
-    public function test_read_file()
+    public function testReadFile()
     {
         $path = 'tests/fixtures/file2.json';
         $result = getDataFromFile($path);
@@ -48,7 +45,7 @@ class ParserTest extends TestCase
     /**
      * @covers \Differ\jsonParser()
      */
-    public function test_JSON_parser()
+    public function testJSONParser()
     {
         $excepted = array(
             'timeout' => 20,
@@ -64,7 +61,7 @@ class ParserTest extends TestCase
     /**
      * @covers \Differ\ymlParser()
      */
-    public function test_YAML_parser()
+    public function testYAMLParser()
     {
         $excepted = array(
             'timeout' => 20,
@@ -83,7 +80,7 @@ class ParserTest extends TestCase
      * @covers \Differ\ymlParser()
      * @covers \Differ\parser()
      */
-    public function test_parser()
+    public function testParser()
     {
         $excepted = array(
             'timeout' => 20,
@@ -103,5 +100,4 @@ class ParserTest extends TestCase
         $this->expectException(\Exception::class);
         $data = parser($path);
     }
-
 }
