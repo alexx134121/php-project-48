@@ -23,5 +23,5 @@ DOC;
     $result = \Docopt::handle($doc, ['version' => 'cli 1.0']);
     $args = $result->args;
     $diff = genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
-    print_r($diff);
+    $res = print_r($diff);
 }

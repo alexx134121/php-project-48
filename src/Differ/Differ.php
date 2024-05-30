@@ -65,40 +65,30 @@ function getStructure(array $old, array $new): array
     return array_reduce($sortedKeys, function ($carry, $key) use ($old, $new) {
         if (array_key_exists($key, $old) && !array_key_exists($key, $new)) {
             if (is_array($old[$key])) {
-                $carry[] = node(null, $key, getStructure($old[$key], $old[$key]), 'del');
-                return $carry;
+                return array_merge($carry, [node(null, $key, getStructure($old[$key], $old[$key]), 'del')]);
             }
-            $carry[] = node($old[$key], $key, [], 'del');
-            return $carry;
+            return array_merge($carry, [node($old[$key], $key, [], 'del')]);
         }
         if (!array_key_exists($key, $old) && array_key_exists($key, $new)) {
             if (is_array($new[$key])) {
-                $carry[] = node(null, $key, getStructure($new[$key], $new[$key]), 'add');
-                return $carry;
+                return array_merge($carry, [node(null, $key, getStructure($new[$key], $new[$key]), 'add')]);
             }
-            $carry[] = node($new[$key], $key, [], 'add');
-            return $carry;
+            return array_merge($carry, [node($new[$key], $key, [], 'add')]);
         }
         if (is_array($old[$key]) && is_array($new[$key])) {
-            $carry[] = node(null, $key, getStructure($old[$key], $new[$key]), 'without_changes');
-            return $carry;
+            return array_merge($carry, [node(null, $key, getStructure($old[$key], $new[$key]), 'without_changes')]);
         }
         if ($old[$key] === $new[$key]) {
-            $carry[] = node($new[$key], $key, [], 'without_changes');
-            return $carry;
+            return array_merge($carry, [node($new[$key], $key, [], 'without_changes')]);
         }
         ///
         if (is_array($old[$key])) {
-            $carry[] = node($new[$key], $key, [], 'update', getStructure($old[$key], $old[$key]));
-            return $carry;
+            return array_merge($carry, [node($new[$key], $key, [], 'update', getStructure($old[$key], $old[$key]))]);
         }
         if (is_array($new[$key])) {
-            $carry[] = node(getStructure($new[$key], $new[$key]), $key, [], 'update', $old[$key]);
-            return $carry;
+            return array_merge($carry, [node(getStructure($new[$key], $new[$key]), $key, [], 'update', $old[$key])]);
         }
-        ///
-        $carry[] = node($new[$key], $key, [], 'update', $old[$key]);
-        return $carry;
+        return array_merge($carry, [node($new[$key], $key, [], 'update', $old[$key])]);
     }, []);
 }
 
@@ -110,6 +100,5 @@ function toStr(mixed $value): string
 
 function immutableSort(array $data): array
 {
-    sort($data);
-    return $data;
+    return \Functional\sort($data, fn($item1, $item2) => $item1 <=> $item2);
 }

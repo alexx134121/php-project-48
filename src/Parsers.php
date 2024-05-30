@@ -28,7 +28,7 @@ function getDataFromFile(string $pathToFile): string
 function parser(string $path): array
 {
     $extension = strtolower(pathinfo($path, PATHINFO_EXTENSION));
-    if (in_array($extension, YAML_EXTENSION)) {
+    if (in_array($extension, YAML_EXTENSION, true)) {
         return ymlParser(getDataFromFile($path));
     }
     if ($extension == JSON_EXTENSION) {

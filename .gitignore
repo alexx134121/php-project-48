@@ -8,3 +8,4 @@ html-coverage
 coverage.php
 coverage.txt
 crap4j.xml
+phpstan.neon

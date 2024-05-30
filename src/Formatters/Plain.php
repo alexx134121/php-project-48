@@ -17,17 +17,16 @@ function plain(array $data, string $path = ''): string
 {
     $result = array_reduce($data, function (array $carry, array $item) use ($path) {
         $key = getKey($item);
-        $currentPath = empty($path) ? $key : "$path.$key";
+        $currentPath = $path === '' ? $key : "$path.$key";
         $value = isComplexValue(getValue($item)) || isComplexValue(getChild($item))
             ? '[complex value]'
             : toStr(getValue($item));
         $oldValue = isComplexValue(\Differ\Differ\getOldValue($item)) ?
             '[complex value]' :
             toStr(\Differ\Differ\getOldValue($item));
-        if (!empty(getChild($item)) && \Differ\Differ\getType($item) == 'without_changes') {
+        if (getChild($item) !== [] && \Differ\Differ\getType($item) == 'without_changes') {
             $child = plain(getChild($item), $currentPath);
-            $carry [] = $child;
-            return $carry;
+            return array_merge($carry, [$child]);
         } elseif (\Differ\Differ\getType($item) == 'without_changes') {
             return $carry;
         }
@@ -38,13 +37,12 @@ function plain(array $data, string $path = ''): string
         } else {
             $str = sprintf(PLAIN_FORMAT[\Differ\Differ\getType($item)], $currentPath, $valueString, $oldValueString);
         }
-        $carry[] = $str;
-        return $carry;
+        return array_merge($carry, [$str]);
     }, []);
     return implode("\n", $result);
 }
 
 function isComplexValue(mixed $item): bool
 {
-    return is_array($item) && !empty($item);
+    return is_array($item) && $item !== [];
 }
