@@ -32,7 +32,7 @@ function iter(mixed $data, int $nested = 1): string
         $type = \Differ\Differ\getType($item);
         $symbol = STYLISH_FORMAT[$type];
         $key = getKey($item);
-        if (is_null(getValue($item)) && !empty(getChild($item))) {
+        if (is_null(getValue($item)) && getChild($item) != []) {
             $child = \Differ\Formatters\iter(getChild($item), $nested + 1);
             return array_merge($carry, ["{$padding}{$symbol}{$key}:{$child}"]);
         }
