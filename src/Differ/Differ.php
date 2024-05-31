@@ -72,7 +72,7 @@ function getStructure(array $old, array $new): array
             if (is_array($old[$key])) {
                 return array_merge($carry, [node(null, $key, getStructure($old[$key], $old[$key]), DELETE)]);
             }
-            return array_merge($carry, [node($old[$key], $key, [], 'del')]);
+            return array_merge($carry, [node($old[$key], $key, [], DELETE)]);
         }
         if (!array_key_exists($key, $old) && array_key_exists($key, $new)) {
             if (is_array($new[$key])) {
