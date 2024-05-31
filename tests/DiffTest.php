@@ -4,6 +4,7 @@ namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 
+use function Differ\Differ\getKeyType;
 use function Differ\Formatters\format;
 use function Differ\Differ\genDiff;
 use function Differ\Differ\genDiffFile;
@@ -11,7 +12,6 @@ use function Differ\Differ\getChild;
 use function Differ\Differ\getKey;
 use function Differ\Differ\getOldValue;
 use function Differ\Differ\getValue;
-use function Differ\Differ\immutableSort;
 use function Differ\Differ\node;
 use function Differ\Differ\toStr;
 
@@ -27,20 +27,7 @@ class DiffTest extends TestCase
     }
 
     /**
-     * @covers \Differ\Differ\immutableSort()
-     */
-    public function testImmutableSort()
-    {
-        $data = ['a', 'b', 'd', 'c'];
-        $expected = ['a', 'b', 'c', 'd'];
-        $result = immutableSort($data);
-        $this->assertEquals($expected, $result);
-        $this->assertNotEquals($data, $result);
-    }
-
-    /**
      * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\immutableSort()
      * @covers \Differ\Differ\toStr()
      * @covers \Differ\Differ\genDiffFile()
      * @covers \Differ\jsonParser()
@@ -77,7 +64,6 @@ class DiffTest extends TestCase
     }
     /**
      * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\immutableSort()
      * @covers \Differ\Differ\toStr()
      * @covers \Differ\Differ\genDiffFile()
      * @covers \Differ\jsonParser()
@@ -103,7 +89,6 @@ class DiffTest extends TestCase
 
     /**
      * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\immutableSort()
      * @covers \Differ\Differ\toStr()
      * @covers \Differ\Differ\genDiffFile()
      * @covers \Differ\jsonParser()
@@ -121,7 +106,6 @@ class DiffTest extends TestCase
 
     /**
      * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\immutableSort()
      * @covers \Differ\Differ\toStr()
      * @covers \Differ\Differ\genDiffFile()
      * @covers \Differ\jsonParser()
@@ -140,7 +124,6 @@ class DiffTest extends TestCase
     }
     /**
      * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\immutableSort()
      * @covers \Differ\Differ\toStr()
      * @covers \Differ\Differ\genDiffFile()
      * @covers \Differ\jsonParser()
@@ -219,7 +202,6 @@ class DiffTest extends TestCase
 
     /**
      * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\immutableSort()
      * @covers \Differ\Differ\toStr()
      * @covers \Differ\Differ\genDiffFile()
      * @covers \Differ\jsonParser()
@@ -240,7 +222,6 @@ class DiffTest extends TestCase
 
     /**
      * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\immutableSort()
      * @covers \Differ\Differ\toStr()
      * @covers \Differ\Differ\genDiffFile()
      * @covers \Differ\jsonParser()
