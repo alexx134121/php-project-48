@@ -4,7 +4,6 @@ namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function Differ\Differ\getKeyType;
 use function Differ\Formatters\format;
 use function Differ\Differ\genDiff;
 use function Differ\Differ\genDiffFile;
@@ -18,7 +17,6 @@ use function Differ\Differ\toStr;
 class DiffTest extends TestCase
 {
     /**
-     * @covers       \Differ\Differ\toStr()
      * @dataProvider stringTestDataProvider
      */
     public function testToString($val, $excepted)
@@ -26,14 +24,6 @@ class DiffTest extends TestCase
         $this->assertEquals($excepted, toStr($val));
     }
 
-    /**
-     * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\toStr()
-     * @covers \Differ\Differ\genDiffFile()
-     * @covers \Differ\jsonParser()
-     * @covers \Differ\parser()
-     * @covers \Differ\Differ\getStructure()
-     */
     public function testDiff()
     {
         $path1 = __DIR__ . '/fixtures/file1.json';
@@ -62,16 +52,7 @@ class DiffTest extends TestCase
         $result = genDiffFile($path1, $path2);
         $this->assertEquals($expected, $result);
     }
-    /**
-     * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\toStr()
-     * @covers \Differ\Differ\genDiffFile()
-     * @covers \Differ\jsonParser()
-     * @covers \Differ\parser()
-     * @covers \Differ\Differ\genDiff()
-     * @covers \Differ\Differ\getStructure()
-     * @covers \Differ\Differ\getOldValue()
-     */
+
 
     public function testNestedStructure()
     {
@@ -87,14 +68,6 @@ class DiffTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\toStr()
-     * @covers \Differ\Differ\genDiffFile()
-     * @covers \Differ\jsonParser()
-     * @covers \Differ\parser()
-     * @covers \Differ\Differ\getStructure()
-     */
     public function testPlanStructure()
     {
         $path1 = __DIR__ . '/fixtures/file1.json';
@@ -104,15 +77,7 @@ class DiffTest extends TestCase
         $this->assertEquals($expected, $result);
     }
 
-    /**
-     * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\toStr()
-     * @covers \Differ\Differ\genDiffFile()
-     * @covers \Differ\jsonParser()
-     * @covers \Differ\parser()
-     * @covers \Differ\Formatters\format()
-     * @covers \Differ\Differ\getStructure()
-     */
+
     public function testFormatPlanStructure()
     {
         $path1 = __DIR__ . '/fixtures/file1.json';
@@ -122,18 +87,7 @@ class DiffTest extends TestCase
         $excepted = file_get_contents(__DIR__ . '/fixtures/diff_result');
         $this->assertEquals($excepted, $formatted);
     }
-    /**
-     * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\toStr()
-     * @covers \Differ\Differ\genDiffFile()
-     * @covers \Differ\jsonParser()
-     * @covers \Differ\parser()
-     * @covers \Differ\Formatters\format()
-     * @covers \Differ\Formatters\stylish()
-     * @covers \Differ\Formatters\iter()
-     * @covers \Differ\Differ\getStructure()
-     * @covers \Differ\Differ\genDiff()
-     */
+
     public function testNestedDiff()
     {
         $path1 = __DIR__ . '/fixtures/nested_file1.json';
@@ -159,23 +113,12 @@ class DiffTest extends TestCase
         $this->assertEquals($expected, genDiff($path1, $path2, 'stylish'));
     }
 
-    /**
-     * @covers \Differ\Formatters\format()
-     */
+
     public function testFormatter()
     {
         $this->expectException(\Exception::class);
         format([], 'test');
     }
-
-    /**
-     * @covers \Differ\Differ\node()
-     * @covers \Differ\Differ\getKey()
-     * @covers \Differ\Differ\getChild()
-     * @covers \Differ\Differ\getType()
-     * @covers \Differ\Differ\getValue()
-     * @covers \Differ\Differ\getOldValue()
-     */
 
     public function testNode()
     {
@@ -200,16 +143,6 @@ class DiffTest extends TestCase
         $this->assertEquals($child, getChild($node));
     }
 
-    /**
-     * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\toStr()
-     * @covers \Differ\Differ\genDiffFile()
-     * @covers \Differ\jsonParser()
-     * @covers \Differ\parser()
-     * @covers \Differ\Formatters\format()
-     * @covers \Differ\Formatters\plain()
-     * @covers \Differ\Formatters\isComplexValue()
-     */
     public function testPlainFormatter()
     {
         $path1 = __DIR__ . '/fixtures/nested_file1.json';
@@ -220,15 +153,6 @@ class DiffTest extends TestCase
         $this->assertEquals($expected, $formatted);
     }
 
-    /**
-     * @covers \Differ\getDataFromFile()
-     * @covers \Differ\Differ\toStr()
-     * @covers \Differ\Differ\genDiffFile()
-     * @covers \Differ\jsonParser()
-     * @covers \Differ\parser()
-     * @covers \Differ\Formatters\format()
-     * @covers \Differ\Formatters\json()
-     */
     public function testJsonStructure()
     {
         $path1 = __DIR__ . '/fixtures/nested_file1.json';

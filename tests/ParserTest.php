@@ -11,9 +11,6 @@ use function Differ\ymlParser;
 
 class ParserTest extends TestCase
 {
-    /**
-     * @covers \Differ\getDataFromFile()
-     */
     public function testFileNotExists()
     {
         $errorPath = 'fixtures/file2111.json';
@@ -22,9 +19,6 @@ class ParserTest extends TestCase
         $this->assertEquals('Не найден путь к файлу fixtures/file2111.json', $result);
     }
 
-    /**
-     * @covers \Differ\getDataFromFile()
-     */
     public function testReadFileAbsolute()
     {
         $path = __DIR__ . '/fixtures/file2.json';
@@ -32,9 +26,6 @@ class ParserTest extends TestCase
         $this->assertNotEquals('Не найден путь к файлу fixtures/file2111.json', $result);
     }
 
-    /**
-     * @covers \Differ\getDataFromFile()
-     */
     public function testReadFile()
     {
         $path = 'tests/fixtures/file2.json';
@@ -42,9 +33,6 @@ class ParserTest extends TestCase
         $this->assertNotEquals('Не найден путь к файлу fixtures/file2111.json', $result);
     }
 
-    /**
-     * @covers \Differ\jsonParser()
-     */
     public function testJSONParser()
     {
         $excepted = array(
@@ -58,9 +46,6 @@ class ParserTest extends TestCase
         $this->assertEquals($excepted, $data);
     }
 
-    /**
-     * @covers \Differ\ymlParser()
-     */
     public function testYAMLParser()
     {
         $excepted = array(
@@ -74,12 +59,6 @@ class ParserTest extends TestCase
         $this->assertEquals($excepted, $data);
     }
 
-    /**
-     * @covers \Differ\getDataFromFile()
-     * @covers \Differ\jsonParser()
-     * @covers \Differ\ymlParser()
-     * @covers \Differ\parser()
-     */
     public function testParser()
     {
         $excepted = array(
