@@ -1,8 +1,8 @@
 <?php
 
-namespace Differ;
+namespace Differ\Handler;
 
-use function Differ\Differ\genDiff;
+use function Differ\Differ\Differ\genDiff;
 
 function run(): void
 {

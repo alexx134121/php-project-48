@@ -1,6 +1,10 @@
 <?php
 
-namespace Differ\Formatters;
+namespace Differ\Formatters\Formatters;
+
+use function Differ\Formatters\Json\json;
+use function Differ\Formatters\Plain\plain;
+use function Differ\Formatters\Stylish\stylish;
 
 const STYLISH = 'stylish';
 const PLAIN = 'plain';

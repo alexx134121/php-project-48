@@ -1,12 +1,13 @@
 <?php
 
-namespace  Differ\Formatters;
+namespace  Differ\Formatters\Stylish;
 
-use function Differ\Differ\getValue;
-use function Differ\Differ\getChild;
-use function Differ\Differ\getKey;
-use function Differ\Differ\getOldValue;
-use function Differ\Differ\toStr;
+use function Differ\Differ\Differ\getTypeNode;
+use function Differ\Differ\Differ\getValue;
+use function Differ\Differ\Differ\getChild;
+use function Differ\Differ\Differ\getKey;
+use function Differ\Differ\Differ\getOldValue;
+use function Differ\Differ\Differ\toStr;
 
 const STYLISH_FORMAT = [
     'add' => '+ ',
@@ -29,11 +30,11 @@ function iter(mixed $data, int $nested = 1): string
     $padding = str_repeat(' ', 4 * $nested - 2);
     $paddingRight = "\n" . str_repeat(' ', 4 * $nested - 4) . "}";
     $res = array_reduce($data, function (array $carry, array $item) use ($nested, $padding) {
-        $type = \Differ\Differ\getType($item);
+        $type = getTypeNode($item);
         $symbol = STYLISH_FORMAT[$type];
         $key = getKey($item);
         if (is_null(getValue($item)) && getChild($item) != []) {
-            $child = \Differ\Formatters\iter(getChild($item), $nested + 1);
+            $child = iter(getChild($item), $nested + 1);
             return array_merge($carry, ["{$padding}{$symbol}{$key}:{$child}"]);
         }
         $oldVal = iter(getOldValue($item), $nested + 1);

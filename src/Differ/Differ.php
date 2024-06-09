@@ -1,11 +1,11 @@
 <?php
 
-namespace Differ\Differ;
+namespace Differ\Differ\Differ;
 
-use function Differ\Formatters\format;
-use function Differ\parser;
+use function Differ\Formatters\Formatters\format;
+use function Differ\Parsers\parser;
 
-use const Differ\Formatters\STYLISH;
+use const Differ\Formatters\Formatters\STYLISH;
 
 const ADD = 'add';
 const DELETE = 'del';
@@ -34,7 +34,7 @@ function getOldValue(array $node): mixed
     return $node['old_value'];
 }
 
-function getType(array $node): string
+function getTypeNode(array $node): string
 {
     return $node['type'];
 }

@@ -1,11 +1,13 @@
 <?php
 
-namespace Differ\Formatters;
+namespace Differ\Formatters\Plain;
 
-use function Differ\Differ\getChild;
-use function Differ\Differ\getKey;
-use function Differ\Differ\getValue;
-use function Differ\Differ\toStr;
+use function Differ\Differ\Differ\getChild;
+use function Differ\Differ\Differ\getKey;
+use function Differ\Differ\Differ\getOldValue;
+use function Differ\Differ\Differ\getTypeNode;
+use function Differ\Differ\Differ\getValue;
+use function Differ\Differ\Differ\toStr;
 
 const PLAIN_FORMAT = [
     'add' => "Property '%s' was added with value: %s",
@@ -17,25 +19,26 @@ function plain(array $data, string $path = ''): string
 {
     $result = array_reduce($data, function (array $carry, array $item) use ($path) {
         $key = getKey($item);
+        $type = getTypeNode($item);
         $currentPath = $path === '' ? $key : "$path.$key";
         $value = isComplexValue(getValue($item)) || isComplexValue(getChild($item))
             ? '[complex value]'
             : toStr(getValue($item));
-        $oldValue = isComplexValue(\Differ\Differ\getOldValue($item)) ?
+        $oldValue = isComplexValue(getOldValue($item)) ?
             '[complex value]' :
-            toStr(\Differ\Differ\getOldValue($item));
-        if (getChild($item) !== [] && \Differ\Differ\getType($item) == 'without_changes') {
+            toStr(getOldValue($item));
+        if (getChild($item) !== [] && $type == 'without_changes') {
             $child = plain(getChild($item), $currentPath);
             return array_merge($carry, [$child]);
-        } elseif (\Differ\Differ\getType($item) == 'without_changes') {
+        } elseif ($type == 'without_changes') {
             return $carry;
         }
         $valueString = is_string(getValue($item)) ? "'$value'" : $value;
-        $oldValueString = is_string(\Differ\Differ\getOldValue($item)) ? "'$oldValue'" : $oldValue;
-        if (\Differ\Differ\getType($item) == 'update') {
-            $str = sprintf(PLAIN_FORMAT[\Differ\Differ\getType($item)], $currentPath, $oldValueString, $valueString);
+        $oldValueString = is_string(getOldValue($item)) ? "'$oldValue'" : $oldValue;
+        if ($type == 'update') {
+            $str = sprintf(PLAIN_FORMAT[$type], $currentPath, $oldValueString, $valueString);
         } else {
-            $str = sprintf(PLAIN_FORMAT[\Differ\Differ\getType($item)], $currentPath, $valueString, $oldValueString);
+            $str = sprintf(PLAIN_FORMAT[$type], $currentPath, $valueString, $oldValueString);
         }
         return array_merge($carry, [$str]);
     }, []);

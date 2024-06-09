@@ -1,6 +1,6 @@
 <?php
 
-namespace Differ;
+namespace Differ\Parsers;
 
 const  YAML_EXTENSION = ['yaml','yml'];
 const  JSON_EXTENSION = 'json';
