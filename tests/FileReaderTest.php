@@ -4,7 +4,7 @@ namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function Differ\Parsers\getDataFromFile;
+use function Differ\FileReader\getDataFromFile;
 use function Differ\Parsers\parser;
 
 class FileReaderTest extends TestCase

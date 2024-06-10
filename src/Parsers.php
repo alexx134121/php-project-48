@@ -2,6 +2,8 @@
 
 namespace Differ\Parsers;
 
+use function Differ\FileReader\getDataFromFile;
+
 const  YAML_EXTENSION = ['yaml','yml'];
 const  JSON_EXTENSION = 'json';
 
@@ -15,19 +17,6 @@ function jsonParser(string $content): array
     return json_decode($content, true, flags: JSON_THROW_ON_ERROR);
 }
 
-function getDataFromFile(string $pathToFile): string
-{
-    $path = realpath($pathToFile);
-
-    if ($path === false) {
-        throw new \Exception("Не найден путь к файлу $pathToFile");
-    }
-    $content = file_get_contents($path);
-    if ($content === false) {
-        throw new \Exception("Ошибка чтения файла $pathToFile");
-    }
-    return $content;
-}
 
 function parser(string $path): array
 {

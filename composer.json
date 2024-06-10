@@ -14,7 +14,8 @@
             "src/Formatters/Plain.php",
             "src/Formatters/Stylish.php",
             "src/Formatters/Json.php",
-            "src/Differ/Differ.php"
+            "src/Differ/Differ.php",
+            "src/FileReader.php"
         ]
     },
     "bin": [
