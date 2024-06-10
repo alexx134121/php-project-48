@@ -2,7 +2,7 @@
 
 namespace Differ\Handler;
 
-use function Differ\Differ\Differ\genDiff;
+use function Differ\Differ\genDiff;
 
 function run(): void
 {

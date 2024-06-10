@@ -2,12 +2,12 @@
 
 namespace  Differ\Formatters\Stylish;
 
-use function Differ\Differ\Differ\getTypeNode;
-use function Differ\Differ\Differ\getValue;
-use function Differ\Differ\Differ\getChild;
-use function Differ\Differ\Differ\getKey;
-use function Differ\Differ\Differ\getOldValue;
-use function Differ\Differ\Differ\toStr;
+use function Differ\Differ\getTypeNode;
+use function Differ\Differ\getValue;
+use function Differ\Differ\getChild;
+use function Differ\Differ\getKey;
+use function Differ\Differ\getOldValue;
+use function Differ\Differ\toStr;
 
 const STYLISH_FORMAT = [
     'add' => '+ ',

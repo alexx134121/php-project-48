@@ -9,4 +9,4 @@ phpstan:
 autoload:
 	composer dump-autoload
 test:
-	XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit tests -c phpunit.xml
+	XDEBUG_MODE=coverage ./vendor/phpunit/phpunit/phpunit tests -c phpunit.xml --colors=always --testdox

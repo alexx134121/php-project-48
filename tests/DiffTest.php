@@ -5,8 +5,8 @@ namespace Differ\Tests;
 use PHPUnit\Framework\TestCase;
 
 use function Differ\Formatters\Formatters\format;
-use function Differ\Differ\Differ\genDiff;
-use function Differ\Differ\Differ\toStr;
+use function Differ\Differ\genDiff;
+use function Differ\Differ\toStr;
 
 class DiffTest extends TestCase
 {
