@@ -3,7 +3,8 @@
 namespace Differ\Differ;
 
 use function Differ\Formatters\Formatters\format;
-use function Differ\Parsers\parser;
+use function Differ\Parsers\Parsers\parserData;
+use function Functional\sort;
 
 use const Differ\Formatters\Formatters\STYLISH;
 
@@ -12,7 +13,7 @@ const DELETE = 'del';
 const WITHOUT_CHANGES = 'without_changes';
 const UPDATE = 'update';
 
-function node(mixed $val, string $key, array $child, string $type, mixed $oldValue = null): array
+function makeNode(mixed $val, string $key, array $child, string $type, mixed $oldValue = null): array
 {
     return
         [
@@ -49,56 +50,50 @@ function getChild(array $node): array
     return $node['child'];
 }
 
-function genDiffFile(string $pathToFile1, string $pathToFile2): array
-{
-    $data1 = parser($pathToFile1);
-    $data2 = parser($pathToFile2);
-    return getStructure($data1, $data2);
-}
 
 function genDiff(string $pathToFile1, string $pathToFile2, string $format = STYLISH): string
 {
-    return format(genDiffFile($pathToFile1, $pathToFile2), $format);
+    $data1 = parserData($pathToFile1);
+    $data2 = parserData($pathToFile2);
+    return format(makeTree($data1, $data2), $format);
 }
 
-function getStructure(array $old, array $new): array
+function makeTree(array $old, array $new): array
 {
     $merge = array_merge(array_keys($old), array_keys($new));
-    $unique = array_unique($merge);
-    $keys = $unique;
-    $sortedKeys = \Functional\sort($keys, fn($item1, $item2) => $item1 <=> $item2);
+    $keys = array_unique($merge);
+    $sortedKeys = sort($keys, fn($item1, $item2) => $item1 <=> $item2);
     return array_reduce($sortedKeys, function ($carry, $key) use ($old, $new) {
         if (array_key_exists($key, $old) && !array_key_exists($key, $new)) {
             if (is_array($old[$key])) {
-                return array_merge($carry, [node(null, $key, getStructure($old[$key], $old[$key]), DELETE)]);
+                return array_merge($carry, [makeNode(null, $key, makeTree($old[$key], $old[$key]), DELETE)]);
             }
-            return array_merge($carry, [node($old[$key], $key, [], DELETE)]);
+            return array_merge($carry, [makeNode($old[$key], $key, [], DELETE)]);
         }
         if (!array_key_exists($key, $old) && array_key_exists($key, $new)) {
             if (is_array($new[$key])) {
-                return array_merge($carry, [node(null, $key, getStructure($new[$key], $new[$key]), ADD)]);
+                return array_merge($carry, [makeNode(null, $key, makeTree($new[$key], $new[$key]), ADD)]);
             }
-            return array_merge($carry, [node($new[$key], $key, [], ADD)]);
+            return array_merge($carry, [makeNode($new[$key], $key, [], ADD)]);
         }
         if (is_array($old[$key]) && is_array($new[$key])) {
-            return array_merge($carry, [node(null, $key, getStructure($old[$key], $new[$key]), WITHOUT_CHANGES)]);
+            return array_merge($carry, [makeNode(null, $key, makeTree($old[$key], $new[$key]), WITHOUT_CHANGES)]);
         }
         if ($old[$key] === $new[$key]) {
-            return array_merge($carry, [node($new[$key], $key, [], WITHOUT_CHANGES)]);
+            return array_merge($carry, [makeNode($new[$key], $key, [], WITHOUT_CHANGES)]);
         }
 
         if (is_array($old[$key])) {
-            return array_merge($carry, [node($new[$key], $key, [], UPDATE, getStructure($old[$key], $old[$key]))]);
+            return array_merge($carry, [makeNode($new[$key], $key, [], UPDATE, makeTree($old[$key], $old[$key]))]);
         }
         if (is_array($new[$key])) {
-            return array_merge($carry, [node(getStructure($new[$key], $new[$key]), $key, [], UPDATE, $old[$key])]);
+            return array_merge($carry, [makeNode(makeTree($new[$key], $new[$key]), $key, [], UPDATE, $old[$key])]);
         }
-        return array_merge($carry, [node($new[$key], $key, [], UPDATE, $old[$key])]);
+        return array_merge($carry, [makeNode($new[$key], $key, [], UPDATE, $old[$key])]);
     }, []);
 }
 
 function toStr(mixed $value): string
 {
-    $result = is_null($value) ? 'null' : str_replace("'", '', trim(var_export($value, true)));
-    return $result;
+    return is_null($value) ? 'null' : str_replace("'", '', trim(var_export($value, true)));
 }

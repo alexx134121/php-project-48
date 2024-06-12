@@ -2,9 +2,11 @@
 
 namespace Differ\Formatters\Formatters;
 
-use function Differ\Formatters\Json\json;
-use function Differ\Formatters\Plain\plain;
-use function Differ\Formatters\Stylish\stylish;
+use Exception;
+
+use function Differ\Formatters\Json\format as jsonFormat;
+use function Differ\Formatters\Plain\format as plainFormat;
+use function Differ\Formatters\Stylish\format as stylishFormat;
 
 const STYLISH = 'stylish';
 const PLAIN = 'plain';
@@ -13,9 +15,9 @@ const JSON = 'json';
 function format(array $data, string $type = STYLISH): string
 {
     return match ($type) {
-        STYLISH => stylish($data),
-        PLAIN => plain($data),
-        JSON => json($data),
-        default => throw new \Exception("Формат $type недоступен")
+        STYLISH => stylishFormat($data),
+        PLAIN => plainFormat($data),
+        JSON => jsonFormat($data),
+        default => throw new Exception("Формат $type недоступен")
     };
 }

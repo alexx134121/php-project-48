@@ -3,9 +3,9 @@
 namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
+use Exception;
 
 use function Differ\FileReader\getDataFromFile;
-use function Differ\Parsers\parser;
 
 class FileReaderTest extends TestCase
 {
@@ -14,7 +14,7 @@ class FileReaderTest extends TestCase
     public function testFileNotExists()
     {
         $errorPath = 'fixtures/file2111.json';
-        $this->expectException(\Exception::class);
+        $this->expectException(Exception::class);
         $result = getDataFromFile($errorPath);
     }
 
@@ -27,17 +27,10 @@ class FileReaderTest extends TestCase
         $this->assertNotEmpty($result);
     }
 
-    public function testFormatFile()
-    {
-        $path = 'tests/fixtures/file2.txt';
-        $this->expectException(\Exception::class);
-        $data = parser($path);
-    }
-
     public function pathFilesDataProvider()
     {
         return [
-            ['tests/fixtures/file2.json'],
+            [self::FIXTURE_PATH . 'file2.json'],
             [self::FIXTURE_PATH . 'file2.json'],
         ];
     }

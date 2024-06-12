@@ -2,9 +2,11 @@
 
 namespace Differ\Handler;
 
+use Docopt;
+
 use function Differ\Differ\genDiff;
 
-function run(): void
+function run(): string
 {
     $doc = <<<DOC
 Generate diff
@@ -20,8 +22,7 @@ Options:
   --format <fmt>                Report format [default: stylish]
 DOC;
 
-    $result = \Docopt::handle($doc, ['version' => 'cli 1.0']);
+    $result = Docopt::handle($doc, ['version' => 'cli 1.0']);
     $args = $result->args;
-    $diff = genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
-    $res = print_r($diff);
+    return genDiff($args['<firstFile>'], $args['<secondFile>'], $args['--format']);
 }

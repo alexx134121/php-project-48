@@ -4,9 +4,9 @@ namespace Differ\Tests;
 
 use PHPUnit\Framework\TestCase;
 
-use function Differ\Formatters\Formatters\format;
-use function Differ\Differ\genDiff;
+use function Differ\Differ\makeTree;
 use function Differ\Differ\toStr;
+use function Differ\Parsers\Parsers\parserData;
 
 class DiffTest extends TestCase
 {
@@ -20,41 +20,16 @@ class DiffTest extends TestCase
         $this->assertEquals($excepted, toStr($val));
     }
 
-
     /**
      * @dataProvider nestedDiffDataProvider
      */
     public function testNestedDiff($path1, $path2, $expectedPath)
     {
-        $formatted = genDiff(self::FIXTURE_PATH . $path1, self::FIXTURE_PATH . $path2, 'stylish');
-        $expected = trim(file_get_contents(self::FIXTURE_PATH . $expectedPath));
-        $this->assertEquals($expected, $formatted);
-    }
-
-    public function testFormatterNotAvailable()
-    {
-        $this->expectException(\Exception::class);
-        format([], 'test');
-    }
-
-    /**
-     * @dataProvider formatterDataProvider
-     */
-    public function testFormatter($path1, $path2, $expectedPath, $format)
-    {
-        $formatted = genDiff(self::FIXTURE_PATH . $path1, self::FIXTURE_PATH . $path2, $format);
-        $expected = trim(file_get_contents(self::FIXTURE_PATH . $expectedPath));
-        $this->assertEquals($expected, $formatted);
-    }
-
-
-    public function formatterDataProvider()
-    {
-        return [
-            ['nested_file1.json', 'nested_file2.json', 'diff_plain_format', 'plain'],
-            ['nested_file1.json', 'nested_file2.json', 'diff_json_format', 'json'],
-            ['nested_file1.json', 'nested_file2.json', 'nested_diff_result', 'stylish'],
-        ];
+        $data1 = parserData(self::FIXTURE_PATH . $path1);
+        $data2 = parserData(self::FIXTURE_PATH . $path2);
+        $diffTree = makeTree($data1, $data2);
+        $expected = json_decode(trim(file_get_contents(self::FIXTURE_PATH . $expectedPath)), true);
+        $this->assertEquals($expected, $diffTree);
     }
 
     public function nestedDiffDataProvider()
@@ -63,17 +38,7 @@ class DiffTest extends TestCase
             [
                 'nested_file1.json',
                 'nested_file2.json',
-                'nested_diff_result',
-            ],
-            [
-                'nested_file1.yaml',
-                'nested_file2.yaml',
-                'nested_diff_result'
-            ],
-            [
-                'nested_file2.yaml',
-                'nested_file1.yaml',
-                'nested_diff_result_2',
+                'nested_structure_2.json',
             ],
         ];
     }

@@ -9,36 +9,37 @@ use function Differ\Differ\getTypeNode;
 use function Differ\Differ\getValue;
 use function Differ\Differ\toStr;
 
-const PLAIN_FORMAT = [
+const PLAIN_FORMAT_TEMPLATES = [
     'add' => "Property '%s' was added with value: %s",
     'del' => "Property '%s' was removed",
     'update' => "Property '%s' was updated. From %s to %s",
 ];
 
-function plain(array $data, string $path = ''): string
+function format(array $data, string $path = ''): string
 {
     $result = array_reduce($data, function (array $carry, array $item) use ($path) {
         $key = getKey($item);
         $type = getTypeNode($item);
+        $nodeValue = getValue($item);
         $currentPath = $path === '' ? $key : "$path.$key";
-        $value = isComplexValue(getValue($item)) || isComplexValue(getChild($item))
+        $value = isComplexValue($nodeValue) || isComplexValue(getChild($item))
             ? '[complex value]'
-            : toStr(getValue($item));
+            : toStr($nodeValue);
         $oldValue = isComplexValue(getOldValue($item)) ?
             '[complex value]' :
             toStr(getOldValue($item));
         if (getChild($item) !== [] && $type == 'without_changes') {
-            $child = plain(getChild($item), $currentPath);
+            $child = format(getChild($item), $currentPath);
             return array_merge($carry, [$child]);
         } elseif ($type == 'without_changes') {
             return $carry;
         }
-        $valueString = is_string(getValue($item)) ? "'$value'" : $value;
+        $valueString = is_string($nodeValue) ? "'$value'" : $value;
         $oldValueString = is_string(getOldValue($item)) ? "'$oldValue'" : $oldValue;
         if ($type == 'update') {
-            $str = sprintf(PLAIN_FORMAT[$type], $currentPath, $oldValueString, $valueString);
+            $str = sprintf(PLAIN_FORMAT_TEMPLATES[$type], $currentPath, $oldValueString, $valueString);
         } else {
-            $str = sprintf(PLAIN_FORMAT[$type], $currentPath, $valueString, $oldValueString);
+            $str = sprintf(PLAIN_FORMAT_TEMPLATES[$type], $currentPath, $valueString, $oldValueString);
         }
         return array_merge($carry, [$str]);
     }, []);

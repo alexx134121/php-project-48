@@ -9,13 +9,15 @@
         },
         "files": [
             "src/Handler.php",
-            "src/Parsers.php",
             "src/Formatters/Formatters.php",
             "src/Formatters/Plain.php",
             "src/Formatters/Stylish.php",
             "src/Formatters/Json.php",
             "src/Differ.php",
-            "src/FileReader.php"
+            "src/FileReader.php",
+            "src/Parsers/Parsers.php",
+            "src/Parsers/Json.php",
+            "src/Parsers/Yaml.php"
         ]
     },
     "bin": [

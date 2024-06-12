@@ -9,7 +9,7 @@ use function Differ\Differ\getKey;
 use function Differ\Differ\getOldValue;
 use function Differ\Differ\toStr;
 
-const STYLISH_FORMAT = [
+const STYLISH_FORMAT_TEMPLATES = [
     'add' => '+ ',
     'del' => '- ',
     'without_changes' => '  ',
@@ -17,7 +17,7 @@ const STYLISH_FORMAT = [
     'padding' => '  ',
 ];
 
-function stylish(array $data, int $nested = 1): string
+function format(array $data, int $nested = 1): string
 {
     return trim(iter($data, $nested));
 }
@@ -31,7 +31,7 @@ function iter(mixed $data, int $nested = 1): string
     $paddingRight = "\n" . str_repeat(' ', 4 * $nested - 4) . "}";
     $res = array_reduce($data, function (array $carry, array $item) use ($nested, $padding) {
         $type = getTypeNode($item);
-        $symbol = STYLISH_FORMAT[$type];
+        $symbol = STYLISH_FORMAT_TEMPLATES[$type];
         $key = getKey($item);
         if (is_null(getValue($item)) && getChild($item) != []) {
             $child = iter(getChild($item), $nested + 1);
@@ -40,8 +40,8 @@ function iter(mixed $data, int $nested = 1): string
         $oldVal = iter(getOldValue($item), $nested + 1);
         $val = iter(getValue($item), $nested + 1);
         if ($type == 'update') {
-            $delSymbol = STYLISH_FORMAT['del'];
-            $addSymbol = STYLISH_FORMAT['add'];
+            $delSymbol = STYLISH_FORMAT_TEMPLATES['del'];
+            $addSymbol = STYLISH_FORMAT_TEMPLATES['add'];
             return array_merge(
                 $carry,
                 ["{$padding}{$delSymbol}{$key}:{$oldVal}"],
