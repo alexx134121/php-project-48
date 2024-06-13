@@ -22,8 +22,7 @@ class FormatterTest extends BaseTestCase
     public function testFormatter($path1, $path2, $expectedPath, $format)
     {
         $formatted = genDiff($this->getFullPathFixtures($path1), $this->getFullPathFixtures($path2), $format);
-        $expected = trim(file_get_contents($this->getFullPathFixtures($expectedPath)));
-        $this->assertEquals($expected, $formatted);
+        $this->assertStringEqualsFile($this->getFullPathFixtures($expectedPath), $formatted);
     }
 
     public function formatterDataProvider()

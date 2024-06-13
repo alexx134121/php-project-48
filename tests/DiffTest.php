@@ -28,7 +28,7 @@ class DiffTest extends BaseTestCase
         $data1 = parserData($this->getFullPathFixtures($path1));
         $data2 = parserData($this->getFullPathFixtures($path2));
         $diffTree = makeTree($data1, $data2);
-        $expected = json_decode(trim(file_get_contents($this->getFullPathFixtures($expectedPath))), true);
+        $expected = json_decode(file_get_contents($this->getFullPathFixtures($expectedPath)), true);
         $this->assertEquals($expected, $diffTree);
     }
 
