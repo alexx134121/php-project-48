@@ -2,18 +2,16 @@
 
 namespace Differ\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Hexlet\Tests\BaseTestCase;
 use Exception;
 
 use function Differ\Parsers\Parsers\parserData;
 
-class ParserTest extends TestCase
+class ParserTest extends BaseTestCase
 {
-    public const FIXTURE_PATH = __DIR__ . '/fixtures/';
-
     public function testFormatFile()
     {
-        $path = self::FIXTURE_PATH . 'file2.txt';
+        $path = $this->getFullPathFixtures('file2.txt');
         $this->expectException(Exception::class);
         $data = parserData($path);
     }
@@ -23,7 +21,7 @@ class ParserTest extends TestCase
      */
     public function testParser($path)
     {
-        $this->assertIsArray(parserData(self::FIXTURE_PATH . $path));
+        $this->assertIsArray(parserData($this->getFullPathFixtures($path)));
     }
 
     public function parserDataProvider()

@@ -50,7 +50,6 @@ function getChild(array $node): array
     return $node['child'];
 }
 
-
 function genDiff(string $pathToFile1, string $pathToFile2, string $format = STYLISH): string
 {
     $data1 = parserData($pathToFile1);
@@ -63,34 +62,34 @@ function makeTree(array $old, array $new): array
     $merge = array_merge(array_keys($old), array_keys($new));
     $keys = array_unique($merge);
     $sortedKeys = sort($keys, fn($item1, $item2) => $item1 <=> $item2);
-    return array_reduce($sortedKeys, function ($carry, $key) use ($old, $new) {
+    return array_map(function ($key) use ($old, $new) {
         if (array_key_exists($key, $old) && !array_key_exists($key, $new)) {
             if (is_array($old[$key])) {
-                return array_merge($carry, [makeNode(null, $key, makeTree($old[$key], $old[$key]), DELETE)]);
+                return makeNode(null, $key, makeTree($old[$key], $old[$key]), DELETE);
             }
-            return array_merge($carry, [makeNode($old[$key], $key, [], DELETE)]);
+            return makeNode($old[$key], $key, [], DELETE);
         }
         if (!array_key_exists($key, $old) && array_key_exists($key, $new)) {
             if (is_array($new[$key])) {
-                return array_merge($carry, [makeNode(null, $key, makeTree($new[$key], $new[$key]), ADD)]);
+                return makeNode(null, $key, makeTree($new[$key], $new[$key]), ADD);
             }
-            return array_merge($carry, [makeNode($new[$key], $key, [], ADD)]);
+            return makeNode($new[$key], $key, [], ADD);
         }
         if (is_array($old[$key]) && is_array($new[$key])) {
-            return array_merge($carry, [makeNode(null, $key, makeTree($old[$key], $new[$key]), WITHOUT_CHANGES)]);
+            return makeNode(null, $key, makeTree($old[$key], $new[$key]), WITHOUT_CHANGES);
         }
         if ($old[$key] === $new[$key]) {
-            return array_merge($carry, [makeNode($new[$key], $key, [], WITHOUT_CHANGES)]);
+            return makeNode($new[$key], $key, [], WITHOUT_CHANGES);
         }
 
         if (is_array($old[$key])) {
-            return array_merge($carry, [makeNode($new[$key], $key, [], UPDATE, makeTree($old[$key], $old[$key]))]);
+            return makeNode($new[$key], $key, [], UPDATE, makeTree($old[$key], $old[$key]));
         }
         if (is_array($new[$key])) {
-            return array_merge($carry, [makeNode(makeTree($new[$key], $new[$key]), $key, [], UPDATE, $old[$key])]);
+            return makeNode(makeTree($new[$key], $new[$key]), $key, [], UPDATE, $old[$key]);
         }
-        return array_merge($carry, [makeNode($new[$key], $key, [], UPDATE, $old[$key])]);
-    }, []);
+        return makeNode($new[$key], $key, [], UPDATE, $old[$key]);
+    }, $sortedKeys);
 }
 
 function toStr(mixed $value): string

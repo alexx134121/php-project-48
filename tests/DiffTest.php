@@ -2,13 +2,13 @@
 
 namespace Differ\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Hexlet\Tests\BaseTestCase;
 
 use function Differ\Differ\makeTree;
 use function Differ\Differ\toStr;
 use function Differ\Parsers\Parsers\parserData;
 
-class DiffTest extends TestCase
+class DiffTest extends BaseTestCase
 {
     public const FIXTURE_PATH = __DIR__ . '/fixtures/';
 
@@ -25,10 +25,10 @@ class DiffTest extends TestCase
      */
     public function testNestedDiff($path1, $path2, $expectedPath)
     {
-        $data1 = parserData(self::FIXTURE_PATH . $path1);
-        $data2 = parserData(self::FIXTURE_PATH . $path2);
+        $data1 = parserData($this->getFullPathFixtures($path1));
+        $data2 = parserData($this->getFullPathFixtures($path2));
         $diffTree = makeTree($data1, $data2);
-        $expected = json_decode(trim(file_get_contents(self::FIXTURE_PATH . $expectedPath)), true);
+        $expected = json_decode(trim(file_get_contents($this->getFullPathFixtures($expectedPath))), true);
         $this->assertEquals($expected, $diffTree);
     }
 

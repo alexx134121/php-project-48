@@ -2,16 +2,14 @@
 
 namespace Differ\Tests;
 
-use PHPUnit\Framework\TestCase;
+use Hexlet\Tests\BaseTestCase;
 use Exception;
 
 use function Differ\Formatters\Formatters\format;
 use function Differ\Differ\genDiff;
 
-class FormatterTest extends TestCase
+class FormatterTest extends BaseTestCase
 {
-    public const FIXTURE_PATH = __DIR__ . '/fixtures/';
-
     public function testFormatterNotAvailable()
     {
         $this->expectException(Exception::class);
@@ -23,11 +21,10 @@ class FormatterTest extends TestCase
      */
     public function testFormatter($path1, $path2, $expectedPath, $format)
     {
-        $formatted = genDiff(self::FIXTURE_PATH . $path1, self::FIXTURE_PATH . $path2, $format);
-        $expected = trim(file_get_contents(self::FIXTURE_PATH . $expectedPath));
+        $formatted = genDiff($this->getFullPathFixtures($path1), $this->getFullPathFixtures($path2), $format);
+        $expected = trim(file_get_contents($this->getFullPathFixtures($expectedPath)));
         $this->assertEquals($expected, $formatted);
     }
-
 
     public function formatterDataProvider()
     {

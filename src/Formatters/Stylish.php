@@ -29,26 +29,22 @@ function iter(mixed $data, int $nested = 1): string
     }
     $padding = str_repeat(' ', 4 * $nested - 2);
     $paddingRight = "\n" . str_repeat(' ', 4 * $nested - 4) . "}";
-    $res = array_reduce($data, function (array $carry, array $item) use ($nested, $padding) {
+    $res = array_map(function (array $item) use ($nested, $padding) {
         $type = getTypeNode($item);
         $symbol = STYLISH_FORMAT_TEMPLATES[$type];
         $key = getKey($item);
         if (is_null(getValue($item)) && getChild($item) != []) {
             $child = iter(getChild($item), $nested + 1);
-            return array_merge($carry, ["{$padding}{$symbol}{$key}:{$child}"]);
+            return "{$padding}{$symbol}{$key}:{$child}";
         }
         $oldVal = iter(getOldValue($item), $nested + 1);
         $val = iter(getValue($item), $nested + 1);
         if ($type == 'update') {
             $delSymbol = STYLISH_FORMAT_TEMPLATES['del'];
             $addSymbol = STYLISH_FORMAT_TEMPLATES['add'];
-            return array_merge(
-                $carry,
-                ["{$padding}{$delSymbol}{$key}:{$oldVal}"],
-                ["{$padding}{$addSymbol}{$key}:{$val}"]
-            );
+            return "{$padding}{$delSymbol}{$key}:{$oldVal}\n{$padding}{$addSymbol}{$key}:{$val}";
         }
-        return array_merge($carry, ["{$padding}{$symbol}{$key}:{$val}"]);
-    }, []);
+        return "{$padding}{$symbol}{$key}:{$val}";
+    }, $data);
     return " {\n" . implode("\n", $res) . "$paddingRight";
 }

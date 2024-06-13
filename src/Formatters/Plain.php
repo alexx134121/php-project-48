@@ -14,10 +14,9 @@ const PLAIN_FORMAT_TEMPLATES = [
     'del' => "Property '%s' was removed",
     'update' => "Property '%s' was updated. From %s to %s",
 ];
-
 function format(array $data, string $path = ''): string
 {
-    $result = array_reduce($data, function (array $carry, array $item) use ($path) {
+    $result = array_map(function (array $item) use ($path) {
         $key = getKey($item);
         $type = getTypeNode($item);
         $nodeValue = getValue($item);
@@ -30,9 +29,9 @@ function format(array $data, string $path = ''): string
             toStr(getOldValue($item));
         if (getChild($item) !== [] && $type == 'without_changes') {
             $child = format(getChild($item), $currentPath);
-            return array_merge($carry, [$child]);
+            return $child;
         } elseif ($type == 'without_changes') {
-            return $carry;
+            return [];
         }
         $valueString = is_string($nodeValue) ? "'$value'" : $value;
         $oldValueString = is_string(getOldValue($item)) ? "'$oldValue'" : $oldValue;
@@ -41,9 +40,9 @@ function format(array $data, string $path = ''): string
         } else {
             $str = sprintf(PLAIN_FORMAT_TEMPLATES[$type], $currentPath, $valueString, $oldValueString);
         }
-        return array_merge($carry, [$str]);
-    }, []);
-    return implode("\n", $result);
+        return $str;
+    }, $data);
+    return implode("\n", array_filter($result, fn($item) => $item !== []));
 }
 
 function isComplexValue(mixed $item): bool
